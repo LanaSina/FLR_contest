@@ -15,6 +15,7 @@ save_clean_data <- function(df, target_columns, output_path, real_data, diffmax,
   # add row id as "time"
   clean_data = data.frame(c(0:(length(df[[target_columns[1]]])-1)), df[[target_columns[1]]], df[[target_columns[2]]])
   colnames(clean_data) = c("t", "x", "y")
+  clean_data[, colnames(clean_data)] <- lapply(colnames(clean_data), function(x) as.numeric(clean_data[[x]]))
   print(length(clean_data$t))
   
   # deal with boundary conditions
@@ -87,11 +88,15 @@ cut_data = function(dataset_dir, output_dir, offset, steps, header, target_colum
   file_id = 1
   run = 0
 
+  dataset_name = ""
   for(i in c(0:(total_cuts-1))){
     print(i)
-    dataset_name = all_files[file_id]
-    print(dataset_name)
-    df = read.csv(dataset_name, check.names = FALSE, header = header)
+    if(dataset_name != all_files[file_id]){
+      dataset_name = all_files[file_id]
+      
+      print(dataset_name)
+      df = read.csv(dataset_name, check.names = FALSE, header = header, stringsAsFactors = FALSE)
+    }
     start = offset + run*steps + 1
     sub_df = df[start:(start + steps -1),]
     output_path = paste(output_dir, i , ".csv", sep = "")
@@ -127,7 +132,7 @@ offset = 5000
 steps = 2000
 header = TRUE
 column_names = c("latitude", "longitude")
-total_cuts = 2
+total_cuts = 20
 real_data = TRUE
 cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts, real_data, NULL, NULL)
 
@@ -138,34 +143,72 @@ Read ants data
 Selected: 0,1,2,3,4
 
 ```{r}
-dataset_dir = paste(base_path, "real_life/Ant20exploration20trajectories/", sep = "")
-all_files = list.files(path = dataset_dir, full.names = TRUE, recursive = FALSE)
+dataset_dir = paste(base_path, "real_life/Ant20exploration20trajectories/data/", sep = "")
 
-# read files in order, plot and save by 2000 time steps increments
-file_id = 1
-run = 0
-steps = 2000
-# starting point for real datasets
+output_dir = "real_ready/1/"
 offset = 10000
-for(i in c(0:4)){
-  print(i)
-  dataset_name = all_files[file_id]
-  print(dataset_name)
-  df = read.csv(dataset_name, check.names = FALSE, header = FALSE)
-  start = offset + run*steps
-  sub_df = df[start:(start + steps -1),]
-  output_path = paste("real_ready/1/", i , ".csv", sep = "")
-  print(output_path)
-  save_clean_data_real(sub_df, c("V2", "V3"), output_path)
-  
-  file_id = file_id + 1
-  if (file_id >= length(all_files) ){
-    file_id = 1
-    run = run + 1
-  }
-}
+steps = 2000
+header = FALSE
+column_names = c("V2", "V3")
+total_cuts = 5
+real_data = TRUE
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts, real_data, NULL, NULL)
 
 ```
+
+Read shark data
+Select 0-4
+
+```{r}
+dataset_dir = paste(base_path, "real_life/sharks/data/", sep = "")
+
+output_dir = "real_ready/2/"
+offset = 10000
+steps = 2000
+header = TRUE
+column_names = c("lat", "long")
+total_cuts = 5
+real_data = TRUE
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts, real_data, NULL, NULL)
+# dataset_name  = paste(dataset_dir, "BT_Palmyra_telemetry_hourly_through2015.csv", sep = "")
+# df = read.csv(dataset_name, check.names = FALSE, header = header, stringsAsFactors = FALSE)
+# 
+# plot(df$lat[1:50], df$long[1:50], type = "l")
+```
+
+Read spiders data
+Data is divided in small trials....
+Selected 0, 1, 6, 7, 14
+```{r}
+dataset_dir = paste(base_path, "real_life/spiders/data/", sep = "")
+
+output_dir = "real_ready/3/"
+offset = 50000
+steps = 2000
+header = TRUE
+column_names = c("x location mm", "y location mm")
+total_cuts = 15
+real_data = TRUE
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts, real_data, NULL, NULL)
+
+```
+
+Read jaguar data
+Select 0, 2, 3, 5, 6
+```{r}
+dataset_dir = paste(base_path, "real_life/jaguars/data/", sep = "")
+
+output_dir = "real_ready/4/"
+offset = 5000
+steps = 2000
+header = TRUE
+column_names = c("location.long", "location.lat")
+total_cuts = 10
+real_data = TRUE
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts, real_data, NULL, NULL)
+
+```
+
 
 Read boids data
 
@@ -175,29 +218,13 @@ output_dir = "fake_ready/0/"
 offset = 0
 steps = 2000
 header = FALSE
-column_names = c("V1", "V2")
+column_names = c("V2", "V3")
 total_cuts = 5
-cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts)
+real_data = FALSE
+diffmax = c(0.4,0.4) #
+field_size = c(1,1)
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts, real_data, diffmax, field_size)
 
-# 4 needs cleaning
-dataset_name = paste(base_path, "fake_life/boids/boids.csv", sep = "")
-df = read.csv(dataset_name, check.names = FALSE, header = FALSE)
-start = offset + 4*steps + 1
-sub_df = df[start:(start + steps -1),]
-sub_df$t = c(0:(length(sub_df$V1)-1))
-plot(sub_df$V1, sub_df$V2, type = "l")
-
-# add 1 to all y data where y < 0.5 (boundary conditions)
-index <- sub_df$V2 < 0.5
-sub_df$V2[index] <- (sub_df$V2[index] + 1) 
-plot(sub_df$V1, sub_df$V2, type = "l")
-
-# save
-output_path = "fake_ready/0/4.csv"
-save_clean_data_real(sub_df, column_names, output_path)
-
-df = read.csv(paste(base_path, output_path, sep=""))
-plot(df)
 ```
 
 
@@ -213,29 +240,25 @@ steps = 2000
 header = FALSE
 column_names = c("V2", "V3")
 total_cuts = 5
-cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts)
-
+real_data = TRUE # no cleaning needed
+diffmax = NULL
+field_size = NULL
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts, real_data, diffmax, field_size)
 ```
 
 Read Olaf data 1
-Boundary conditions are terrible.... skip for now
 
 ```{r}
-
-df = read.csv(paste(base_path, "fake_life/olaf_1/data_fake_life_1.csv", sep=""), check.names = FALSE)
-
-
 dataset_dir = paste(base_path, "fake_life/olaf_1/", sep = "")
 output_dir = "fake_ready/2/"
 offset = 0
 steps = 2000
 header = TRUE
 column_names = c("x", "y")
-total_cuts = 2
+total_cuts = 5
 diffmax = c(6,6)
 field_size = c(8,8)
 cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts, FALSE, diffmax, field_size)
-
 
 ```
 
@@ -244,8 +267,6 @@ Read Olaf data 2
 Data is clean
 
 ```{r}
-
-
 dataset_dir = paste(base_path, "fake_life/olaf_2/", sep = "")
 output_dir = "fake_ready/3/"
 offset = 0
@@ -253,8 +274,10 @@ steps = 2000
 header = TRUE
 column_names = c("x", "y")
 total_cuts = 5
-cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts)
-
+real_data = TRUE # no cleaning needed
+diffmax = NULL
+field_size = NULL
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts, real_data, diffmax, field_size)
 
 ```
 
@@ -269,7 +292,33 @@ steps = 2000
 header = TRUE
 column_names = c("x", "y")
 total_cuts = 5
-cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts)
+real_data = TRUE # no cleaning needed
+diffmax = NULL
+field_size = NULL
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts, real_data, diffmax, field_size)
+
+```
+
+
+Finally, plot all selected data
+
+```{r}
+
+dataset_dir = paste(base_path, "real_ready/", sep = "")
+all_files = list.files(path = dataset_dir, full.names = TRUE, recursive = TRUE)
+
+for(dataset_name in all_files){
+    df = read.csv(dataset_name, check.names = FALSE, header = header, stringsAsFactors = FALSE)
+    plot(x = df$x, y = df$y, type = "l", main = dataset_name)
+}
+
+dataset_dir = paste(base_path, "fake_ready/", sep = "")
+all_files = list.files(path = dataset_dir, full.names = TRUE, recursive = TRUE)
+
+for(dataset_name in all_files){
+    df = read.csv(dataset_name, check.names = FALSE, header = header, stringsAsFactors = FALSE)
+    plot(x = df$x, y = df$y, type = "l", main = dataset_name)
+}
 
 ```
 
