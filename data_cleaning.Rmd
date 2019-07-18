@@ -1,0 +1,275 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Utility functions
+
+```{r}
+# select and rename columns
+# detect boundary conditions
+# diffmax: maximum tolerated difference between t and t+1 to detect border crossing, eg c(velocity_xmax, velocity_ymax)
+# field_size: to offsed boundary crossing
+save_clean_data <- function(df, target_columns, output_path, real_data, diffmax, field_size) {
+  
+  # add row id as "time"
+  clean_data = data.frame(c(0:(length(df[[target_columns[1]]])-1)), df[[target_columns[1]]], df[[target_columns[2]]])
+  colnames(clean_data) = c("t", "x", "y")
+  print(length(clean_data$t))
+  
+  # deal with boundary conditions
+  if(!real_data){
+    nrows = length(clean_data$t)
+    #boundary conditions
+    diff = clean_data
+    diff$dx = diff$x - c(0, diff$x[1:(nrows-1)])
+    index <- diff$dx > diffmax[1]
+    # offset all data from there
+    time_indices = clean_data$t[index]
+    for ( time in time_indices) {
+      clean_data$x[(time+1):nrows] = clean_data$x[(time+1):nrows] - field_size[1]
+    }
+    
+    index = diff$dx < (-diffmax[1])
+    time_indices = clean_data$t[index]
+    for ( time in time_indices) {
+      clean_data$x[(time+1):nrows] = clean_data$x[(time+1):nrows] + field_size[1]
+    }
+
+    diff$dy = diff$y - c(0, diff$y[1:(nrows-1)])
+    index <- diff$dy > diffmax[2]
+    time_indices = clean_data$t[index]
+    for ( time in time_indices) {
+      clean_data$y[(time+1):nrows] = clean_data$y[(time+1):nrows] - field_size[2]
+    }
+    
+    index = diff$dy < (-diffmax[2])
+    time_indices = clean_data$t[index]
+    for ( time in time_indices) {
+      clean_data$y[(time+1):nrows] = clean_data$y[(time+1):nrows] + field_size[2]
+    }
+  }
+  
+  # plot(x = clean_data$x, y = clean_data$y,
+  #      type = "l", main = output_path)
+  
+  # finally, normalize the data and give precision to 4 decimals
+  precision = 4
+  factor = max(clean_data$x) - min(clean_data$x)
+  off = min(clean_data$x)
+  clean_data$x = round( (clean_data$x-off)/factor, digits = precision)
+  factor = max(clean_data$y) - min(clean_data$y)
+  off = min(clean_data$y)
+  clean_data$y = round( (clean_data$y - off)/factor, digits = precision)
+
+  plot(x = clean_data$x, y = clean_data$y,
+       type = "l", main = output_path)
+  
+  write.csv(clean_data, paste(base_path, output_path, sep = ""), row.names=FALSE) 
+  print(output_path)
+}
+
+# cut files in a directory into smaller bits
+# offset: starting point, everything before this step will be ignored
+# dataset_dir: path where the files are stored
+# output_dir: path where the output will be stored
+# steps: size of each output file
+# header: do the data files have headers or not
+# column_names: columns to be selected
+# total_cuts: number of output files
+# real_data: true if real data, false if fake
+cut_data = function(dataset_dir, output_dir, offset, steps, header, target_columns,
+                    total_cuts, real_data, diffmax, field_size){
+  dir.create(paste(base_path, output_dir, sep = ""), showWarnings = FALSE)
+
+  all_files = list.files(path = dataset_dir, full.names = TRUE, recursive = FALSE)
+  # read files in order, plot and save by 2000 time steps increments
+  file_id = 1
+  run = 0
+
+  for(i in c(0:(total_cuts-1))){
+    print(i)
+    dataset_name = all_files[file_id]
+    print(dataset_name)
+    df = read.csv(dataset_name, check.names = FALSE, header = header)
+    start = offset + run*steps + 1
+    sub_df = df[start:(start + steps -1),]
+    output_path = paste(output_dir, i , ".csv", sep = "")
+    print(output_path)
+    save_clean_data(sub_df, target_columns, output_path, real_data, diffmax, field_size)
+   
+    file_id = file_id + 1
+    if (file_id >= length(all_files) ){
+      file_id = 1
+      run = run + 1
+    }
+  }
+}
+
+```
+
+
+Path variables
+
+```{r}
+
+# dataset base path
+base_path = "/Users/lana/Desktop/prgm/CSL/FLR_contest/data/"
+
+```
+
+Bird data.
+Selected: 0, 1, 4, 7, 13
+```{r}
+dataset_dir = paste(base_path, "real_life/Annotated20GPS20tracking20data/data/", sep = "")
+output_dir = "real_ready/0/"
+offset = 5000
+steps = 2000
+header = TRUE
+column_names = c("latitude", "longitude")
+total_cuts = 2
+real_data = TRUE
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts, real_data, NULL, NULL)
+
+```
+
+
+Read ants data
+Selected: 0,1,2,3,4
+
+```{r}
+dataset_dir = paste(base_path, "real_life/Ant20exploration20trajectories/", sep = "")
+all_files = list.files(path = dataset_dir, full.names = TRUE, recursive = FALSE)
+
+# read files in order, plot and save by 2000 time steps increments
+file_id = 1
+run = 0
+steps = 2000
+# starting point for real datasets
+offset = 10000
+for(i in c(0:4)){
+  print(i)
+  dataset_name = all_files[file_id]
+  print(dataset_name)
+  df = read.csv(dataset_name, check.names = FALSE, header = FALSE)
+  start = offset + run*steps
+  sub_df = df[start:(start + steps -1),]
+  output_path = paste("real_ready/1/", i , ".csv", sep = "")
+  print(output_path)
+  save_clean_data_real(sub_df, c("V2", "V3"), output_path)
+  
+  file_id = file_id + 1
+  if (file_id >= length(all_files) ){
+    file_id = 1
+    run = run + 1
+  }
+}
+
+```
+
+Read boids data
+
+```{r}
+dataset_dir = paste(base_path, "fake_life/boids", sep = "")
+output_dir = "fake_ready/0/"
+offset = 0
+steps = 2000
+header = FALSE
+column_names = c("V1", "V2")
+total_cuts = 5
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts)
+
+# 4 needs cleaning
+dataset_name = paste(base_path, "fake_life/boids/boids.csv", sep = "")
+df = read.csv(dataset_name, check.names = FALSE, header = FALSE)
+start = offset + 4*steps + 1
+sub_df = df[start:(start + steps -1),]
+sub_df$t = c(0:(length(sub_df$V1)-1))
+plot(sub_df$V1, sub_df$V2, type = "l")
+
+# add 1 to all y data where y < 0.5 (boundary conditions)
+index <- sub_df$V2 < 0.5
+sub_df$V2[index] <- (sub_df$V2[index] + 1) 
+plot(sub_df$V1, sub_df$V2, type = "l")
+
+# save
+output_path = "fake_ready/0/4.csv"
+save_clean_data_real(sub_df, column_names, output_path)
+
+df = read.csv(paste(base_path, output_path, sep=""))
+plot(df)
+```
+
+
+Clean artificial chemistry data
+Data is already perfectly clean
+
+```{r}
+
+dataset_dir = paste(base_path, "fake_life/artificial_chemistry/", sep = "")
+output_dir = "fake_ready/1/"
+offset = 0
+steps = 2000
+header = FALSE
+column_names = c("V2", "V3")
+total_cuts = 5
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts)
+
+```
+
+Read Olaf data 1
+Boundary conditions are terrible.... skip for now
+
+```{r}
+
+df = read.csv(paste(base_path, "fake_life/olaf_1/data_fake_life_1.csv", sep=""), check.names = FALSE)
+
+
+dataset_dir = paste(base_path, "fake_life/olaf_1/", sep = "")
+output_dir = "fake_ready/2/"
+offset = 0
+steps = 2000
+header = TRUE
+column_names = c("x", "y")
+total_cuts = 2
+diffmax = c(6,6)
+field_size = c(8,8)
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts, FALSE, diffmax, field_size)
+
+
+```
+
+
+Read Olaf data 2
+Data is clean
+
+```{r}
+
+
+dataset_dir = paste(base_path, "fake_life/olaf_2/", sep = "")
+output_dir = "fake_ready/3/"
+offset = 0
+steps = 2000
+header = TRUE
+column_names = c("x", "y")
+total_cuts = 5
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts)
+
+
+```
+
+Read robot arm data
+
+```{r}
+
+dataset_dir = paste(base_path, "fake_life/robot_arm/", sep = "")
+output_dir = "fake_ready/4/"
+offset = 0
+steps = 2000
+header = TRUE
+column_names = c("x", "y")
+total_cuts = 5
+cut_data(dataset_dir, output_dir, offset, steps, header, column_names, total_cuts)
+
+```
+
