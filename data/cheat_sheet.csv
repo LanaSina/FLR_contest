@@ -1,0 +1,11 @@
+all_data_ready_id,initial_id
+0,fake_ready/0
+1,fake_ready/1
+2,real_ready/2
+3,fake_ready/3
+4,real_ready/4
+5,real_ready/0
+6,real_ready/1
+7,fake_ready/4
+8,fake_ready/2
+9,real_ready/3

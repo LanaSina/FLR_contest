@@ -324,3 +324,20 @@ for(dataset_name in all_files){
 
 ```
 
+
+Plot the 1st chunk of final data for verification
+
+```{r}
+dataset_dir = paste(base_path, "all_data_ready/", sep = "")
+all_dirs = list.dirs(path = dataset_dir, full.names = TRUE, recursive = FALSE)
+
+#all_files = list.files(path = dataset_dir, full.names = TRUE, recursive = TRUE)
+
+for(dataset_dir in all_dirs){
+    dataset_name = paste(dataset_dir,"/0.csv", sep="")
+    df = read.csv(dataset_name, check.names = FALSE, header = TRUE, stringsAsFactors = FALSE)
+    plot(x = df$x, y = df$y, type = "l", main = dataset_name)
+}
+
+```
+
