@@ -1,0 +1,2 @@
+python starting_kit_1/submission.py /Users/lana/Desktop/prgm/CSL/FLR_contest/Fake\ Life\ Recognition\ Contest/ans  ./res
+sudo apachectl stop
