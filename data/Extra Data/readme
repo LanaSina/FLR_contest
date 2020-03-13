@@ -1,0 +1,5 @@
+Dataset 10: Seal Diving Data : https://figshare.com/articles/Dive_track_profile_of_weddell_seal_DRE2003_wed_a_f_11/10669100
+Dataset 11: Autonomous Drone Swarm : https://figshare.com/articles/Flight_logs_of_drone_swarms/6843977
+
+
+Since we had more samples on dataset 10 and more variety, we choose 5 random csv files, without replacement, and tested best 2 algorihms of both competitiors. We repeated this proccess for 100 times and took the average score of each algorithm.
