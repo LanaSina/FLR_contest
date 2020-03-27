@@ -1,0 +1,3 @@
+The archive has 2 files. The first file has general information about captured animals (estimated age, weight, collar used, etc.). The second file has general information on animals' location.
+
+link https://figshare.com/articles/DataS1/6734978

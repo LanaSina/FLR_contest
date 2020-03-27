@@ -1,0 +1,3 @@
+Movement data of spiders in circular arenas of three sizes, divided into three sheets (tabs). Trial number is given in column A. Spider's location is given in columns B and C. Conversion from pixels to millimeters is given in column D. Location of arena center is given in pixels in columns E and F. Radius of the arena is given in pixels in column G.
+
+link https://figshare.com/articles/Spider_Tracking/7368434
