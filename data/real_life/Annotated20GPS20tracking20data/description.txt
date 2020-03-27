@@ -1,0 +1,4 @@
+Example of daily foraging rhythms in three Montagu’s Harriers
+Annotated GPS-tracking data used to create Figure 2 (Example of daily foraging rhythms in three Montagu’s Harriers). One file is included per bird. The zip files includes a word file describing the different columns.
+
+link https://figshare.com/articles/Annotated_GPS_tracking_data/6034301
