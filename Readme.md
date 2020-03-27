@@ -31,7 +31,7 @@ Raw data for artificial datasets and their descriptions (because of GitHub file 
 Data description can be found in the raw data folders, and also below:
 
 
-Real data:
+### Real data:
 
 Example of daily foraging rhythms in three Montagu’s Harriers  
 https://figshare.com/articles/Annotated_GPS_tracking_data/6034301  
@@ -56,7 +56,7 @@ https://figshare.com/articles/Spider_Tracking/7368434
 Movement data of spiders in circular arenas of three sizes, divided into three sheets (tabs). Trial number is given in column A. Spider's location is given in columns B and C. Conversion from pixels to millimeters is given in column D. Location of arena center is given in pixels in columns E and F. Radius of the arena is given in pixels in column G.
 
 
-Fake data:
+### Fake data:
 
 Artificial Chemistry (generously donated by Hiroki Sayama)  
 Trajectory of a single particle within a swarm chemistry model that is going through a morphogenesis process as described in (Sayama, 2010):  
