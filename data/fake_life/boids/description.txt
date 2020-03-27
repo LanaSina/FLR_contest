@@ -1,0 +1,25 @@
+boids
+
+Boidsのデータです。
+CSV 
+boids_N50m_T0-11300_ID1000.csv
+848 kB CSV — Click to download
+
+
+- N = 524288
+- T = 0 ~ 11300 [step]
+- Initial condition: random uniform distribution
+- Periodic boundary
+- All dimensions standardized in 0 - 1.0
+- Data is x, y and z value of 1 agent time ordered
+#注意#
+T = 0はinitial conditionなので、群にはなっていなくて、全agentsがuniform distributionです。
+なので、
+1) 群が形成される過程 => 全部のデータ
+2) 群ができてからの過程 => 最後の方1000~2000step
+と使ってください (edited) 
+
+maruyama 12:15 AM
+FYI
+2D projection to X-Y plane and X-Z plane. (edited) 
+boids_2d.png 
