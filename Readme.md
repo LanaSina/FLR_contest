@@ -13,7 +13,7 @@ Final winner: Team Christin (`winning_submission_hypothesis.pdf`)
 
 The following is extracted from the link above.
 
-INTRO 
+### INTRO 
 
 The problem of identifying living systems from non-living one is a difficult question, which research fields such as artificial life or origins of life have been trying to address for decades or more. One can probably tell by sight that a walking line of ants is made of living things, while a flowing river is not. Can a computer tell apart living from non-living things as well as we can? The question is not settled in theory, but we had the idea of trying to settle it in practice.
 
