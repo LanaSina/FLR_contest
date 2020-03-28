@@ -9,6 +9,8 @@ The final scoreboard for the 5 submissions that scored 7 points in the initial p
 
 ![Final phase scoreboard](winner_scoring.png)
 
+Final winner: Team Christin (`winning_submission_hypothesis.pdf`)
+
 The following is extracted from the link above.
 
 INTRO 
