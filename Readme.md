@@ -5,6 +5,10 @@
 This repository contains the data and data cleaning scripts used to run the competion at https://competitions.codalab.org/competitions/20612 , organized by Olaf Witkowski and Lana Sinapayen, with help from Kaan Akinci, Chitora Shindo, and 
 Elhadji Amadou Oury Diallo. Logo and design from Lucy Kwok.
 
+The final scoreboard for the 5 submissions that scored 7 points in the initial phase (correct answer: drone=0, seal=1)
+
+![Final phase scoreboard](winner_scoring.png)
+
 The following is extracted from the link above.
 
 INTRO 
@@ -28,6 +32,19 @@ The scoring algorithm for the final phase is `data/final_phase_data/evaluation.i
 The data in the `data` folder is divided into:
 
 Raw data for artificial datasets and their descriptions (because of GitHub file limitations, the raw data for sharks is not included and should be downloaded from the link below); cleaned datasets, i.e. real_life and fake_life processed through `data_cleaning.Rmd` (real_ready and fake_ready); the data in the order in which it was uploaded to the codalab platform (all_data_ready), i.e. fake_ready and real_ready put together; the data used for the final phase of the contest (final_phase_data).
+
+
+Examples of trajectories from living organisms
+
+![Real data 0](_real_0.png)
+![Real data 1](_real_1.png)
+![Real data 2](_real_2.png)
+
+Examples of trajectories from non-living systems
+
+![Fake data 0](_fake_0.png)
+![Fake data 1](_fake_1.png)
+![Fake data 2](_fake_2.png)
 
 Data description can be found in the raw data folders, and also below:
 
