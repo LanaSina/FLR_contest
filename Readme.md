@@ -22,6 +22,7 @@ The datasets consist in time series of trajectory positions in 2D (those are mea
 ## Data
 
 The repository contains a R notebook with the code used to clean the data, and the ID of the data files that were selected (`data_cleaning.Rmd`) as well as the corresponding html output (`data_cleaning.html`). Download the html and open it in your browser to see the graphs.
+The scoring algorithm for the final phase is `data/final_phase_data/evaluation.ipynb`
 
 
 The data in the `data` folder is divided into:
