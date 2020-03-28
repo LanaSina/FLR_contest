@@ -5,6 +5,10 @@
 This repository contains the data and data cleaning scripts used to run the competion at https://competitions.codalab.org/competitions/20612 , organized by Olaf Witkowski and Lana Sinapayen, with help from Kaan Akinci, Chitora Shindo, and 
 Elhadji Amadou Oury Diallo. Logo and design from Lucy Kwok.
 
+The final scoreboard for the 5 submissions that scored 7 points in the initial phase (correct answer: drone=0, seal=1)
+
+![Final phase scoreboard](winner_scoring.png)
+
 The following is extracted from the link above.
 
 INTRO 
