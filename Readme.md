@@ -14,7 +14,7 @@ Final winner: Team Christin (`winning_submission_hypothesis.pdf`)
 Correct answers: see also `data/cheat_sheet.csv`
 
 0,fake_ready/0  Boids  
-1,fake_ready/1  Artificial Chemistry 
+1,fake_ready/1  Artificial Chemistry  
 2,real_ready/2  Sharks  
 3,fake_ready/3  Artificial Agent  
 4,real_ready/4  Jaguars  
