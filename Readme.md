@@ -16,12 +16,12 @@ Correct answers: see also `data/cheat_sheet.csv`
 0,fake_ready/0  Boids  
 1,fake_ready/1  Artificial Chemistry 
 2,real_ready/2  Sharks  
-3,fake_ready/3  Artificial Agent
-4,real_ready/4  Jaguars
+3,fake_ready/3  Artificial Agent  
+4,real_ready/4  Jaguars  
 5,real_ready/0  Birds  
 6,real_ready/1  Ants  
-7,fake_ready/4  Robot Arm
-8,fake_ready/2  Soft robot
+7,fake_ready/4  Robot Arm  
+8,fake_ready/2  Soft robot  
 9,real_ready/3  Spiders  
 
 
