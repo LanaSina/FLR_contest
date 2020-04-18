@@ -7,7 +7,7 @@ Elhadji Amadou Oury Diallo. Logo and design from Lucy Kwok.
 
 The final scoreboard for the 5 submissions that scored 7 points in the initial phase (correct answer: drone=0, seal=1)
 
-![Final phase scoreboard](winner_scoring.png)
+![Final phase scoreboard](winner_scoring.png) 
 
 Final winner: Team Christin (`winning_submission_hypothesis.pdf`)
 
